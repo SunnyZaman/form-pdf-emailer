@@ -5,9 +5,10 @@ function sendEmails() {
 var sheet = SpreadsheetApp.getActiveSheet();
 
   var startRow = 2;  // First row of data to process
-  var numRows = 5;   // Number of rows to process
-  // Fetch the range of cells A2:C6
-  var dataRange = sheet.getRange(startRow, 1, numRows, 3)
+  var lrow = sheet.getLastRow();
+  var lcol = sheet.getLastColumn();
+
+  var dataRange = sheet.getRange(startRow, 1, lrow -1, lcol)
   // Fetch values for each row in the Range.
   var data = dataRange.getValues();
   for (var i = 0; i < data.length; ++i) {
@@ -25,25 +26,28 @@ var sheet = SpreadsheetApp.getActiveSheet();
     body.appendParagraph(emailAddress);
     body.appendParagraph(message + ' ' + '☎');
     
-    ////Highlighting text///
-  var textToHighlight = message;
-  var highlightStyle = {};
-  highlightStyle[DocumentApp.Attribute.FOREGROUND_COLOR] = '#FF0000';
-  var paras = doc.getParagraphs();
-  var textLocation = {};
-  var j;
-
-  for (j=0; j<paras.length; ++j) {
-    textLocation = paras[j].findText(textToHighlight);
-    if (textLocation != null && textLocation.getStartOffset() != -1) {
-      textLocation.getElement().setAttributes(textLocation.getStartOffset(),textLocation.getEndOffsetInclusive(), highlightStyle);
-    }
-  }
-  /////////////////////////////////
+ 
   
     var emailSent = row[2];     // Third column
     if (emailSent != EMAIL_SENT) {  // Prevents sending duplicates
       var subject = "Sending pdf email";
+
+
+    ////Highlighting text///
+    var textToHighlight = message;
+    var highlightStyle = {};
+    highlightStyle[DocumentApp.Attribute.FOREGROUND_COLOR] = '#FF0000';
+    var paragraph = doc.getParagraphs();
+    var textLocation = {};
+    var j;
+
+    for (j=0; j<paragraph.length; ++j) {
+      textLocation = paragraph[j].findText(textToHighlight);
+      if (textLocation != null && textLocation.getStartOffset() != -1) {
+        textLocation.getElement().setAttributes(textLocation.getStartOffset(),textLocation.getEndOffsetInclusive(), highlightStyle);
+      }
+    }
+    /////////////////////////////////
 
      doc.saveAndClose();
      var pdf = DriveApp.getFileById(doc.getId()).getBlob().getAs('application/pdf').setName('Form Sender');
