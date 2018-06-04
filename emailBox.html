@@ -1,0 +1,38 @@
+<html>
+<head>
+<style>
+
+</style>
+<script type="text/javascript">
+ function clickFunction(){
+      var email_regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if(!(email_regex.test(document.getElementById('email').value)))
+      {
+         document.getElementById("popup").innerHTML = "Email is not valid";
+      }
+      else{
+        document.getElementById("buttonS").disabled = true;
+        document.getElementById("popup").innerHTML = "Sending..."
+        google.script.run
+        .withSuccessHandler(google.script.host.close)
+        .sendEmails2(document.getElementById('email').value);
+       }
+ }
+  
+</script>
+</head>
+<body>
+  <div id = "container">
+    <form id = "formDate">
+      <label>Send Email to: </label>
+      <input name="email" id= "email"type="text" maxlength="255"  placeholder=""/>
+      <br><br>
+        <input id="buttonS" type="button" value="Submit" onclick="clickFunction()"/>
+        <input id="buttonC" type="button" value="Cancel" onclick="google.script.host.close();"/>
+        
+    </form>
+    <p id="popup"></p>
+  </div>
+</body>
+</html>
+
