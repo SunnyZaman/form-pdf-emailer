@@ -27,7 +27,6 @@ function sendEmails2(email) {
     var emailSent = row[lastcolumn-1];    
     if (emailSent != EMAIL_SENT) {  // Prevents sending duplicates
       var file = DriveApp.getFileById("1L9oIyqnqLQhVbPlid8zkromD-MS1hjh_8t1prD9CqUU");
-      //var copyfile = file.makeCopy();
       var newId = file.getId();
       var doc = DocumentApp.openById(newId);
       doc.setName('Title of File');
@@ -67,7 +66,6 @@ function sendEmails2(email) {
       var pdf = DriveApp.getFileById(doc.getId()).getBlob().getAs('application/pdf').setName('Form Sender');
       MailApp.sendEmail(email, subject, 'This is a message filler', {attachments:[pdf]});
       sheet.getRange(startRow + i, lastcolumn).setValue(EMAIL_SENT);
-      //DriveApp.getFileById(newId).setTrashed(true); //added
       doc = DocumentApp.openById(newId);
       doc.setText('');
       doc.setName('CCS Blank Google Doc Template');
@@ -85,28 +83,3 @@ function showPrompt() {
   .setWidth(300);
   ui.showModalDialog(html, 'Email'); 
 }
-
-/*function getEmail(form){
-  var email = form;
-}
-*/
-
-/*function showPrompt() {
-  var ui = SpreadsheetApp.getUi();
-  var result = ui.prompt(
-      'Email Sender',
-      'Send email to:',
-      ui.ButtonSet.OK_CANCEL);
-  // Process the user's response.
-  var button = result.getSelectedButton();
-  var text = result.getResponseText();
-  if (button == ui.Button.OK) {
-    // User clicked "OK".
-    sendEmails2(text);
-  } else if (button == ui.Button.CANCEL) {
-    // User clicked "Cancel".
-  } else if (button == ui.Button.CLOSE) {
-    // User clicked X in the title bar.
-  }
-}
-*/
